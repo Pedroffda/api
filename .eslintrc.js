@@ -22,9 +22,10 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
   },
-  editor: {
-    'codeActionsOnSave': {
-      'source.fixAll.eslint': true
-    }
-  }
+  prettier: [
+    'error',
+    {
+      endOfLine: 'auto',
+    },
+  ],
 };
