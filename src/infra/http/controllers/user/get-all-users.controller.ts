@@ -1,4 +1,6 @@
 import { GetAllUsersUseCase } from '@/domain/user/application/use-cases/get-all-users.use-case';
+import { CurrentUser } from '@/infra/auth/current-user-decorator';
+import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -8,7 +10,7 @@ export class GetAllUsersController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  async getAllUsers() {
-    return await this.getAllUsersUseCase.execute();
+  async getAllUsers(@CurrentUser() user: UserPayload) {
+    return await this.getAllUsersUseCase.execute(user);
   }
 }

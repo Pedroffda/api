@@ -8,6 +8,7 @@ import { z } from 'zod';
 
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
+  isAdmin: z.boolean(),
 });
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>;

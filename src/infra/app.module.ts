@@ -1,8 +1,9 @@
 import { envSchema } from '@/infra/env';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-// import { CreateTransactionsController } from './controllers/create-transaction.controller';
+import { RolesGuard } from './auth/roles.guard';
 import { PrismaService } from './database/prisma/prisma.service';
 import { HttpModule } from './http/http.module';
 
@@ -15,6 +16,12 @@ import { HttpModule } from './http/http.module';
     AuthModule,
     HttpModule,
   ],
-  providers: [PrismaService],
+  providers: [
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

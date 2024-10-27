@@ -7,6 +7,7 @@ export interface IUserProps {
   password: string;
   createdAt?: Date;
   updatedAt?: Date | null;
+  isAdmin?: boolean;
 }
 
 export class User extends Entity<IUserProps> {
@@ -28,6 +29,10 @@ export class User extends Entity<IUserProps> {
 
   get updatedAt(): Date | null {
     return this.props.updatedAt ?? null;
+  }
+
+  get isAdmin(): boolean {
+    return this.props.isAdmin ?? false;
   }
 
   set name(value: string) {
@@ -59,7 +64,6 @@ export class User extends Entity<IUserProps> {
       id: this.id,
       name: this.name,
       email: this.email,
-      password: this.password,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

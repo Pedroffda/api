@@ -31,6 +31,7 @@ export class AuthenticateController {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
+        isActive: true,
       },
     });
 
@@ -46,6 +47,7 @@ export class AuthenticateController {
 
     const accessToken = this.jwtService.sign({
       sub: user.id,
+      isAdmin: user.isAdmin,
     });
 
     return {
