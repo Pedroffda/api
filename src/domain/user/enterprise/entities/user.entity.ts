@@ -1,22 +1,67 @@
-export class User {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly email: string;
-  public readonly password: string;
-  public readonly createdAt: Date;
-  public readonly updatedAt: Date | null;
+import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
-  constructor(
-    props: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
-    id?: string,
-    createdAt?: Date,
-    updatedAt?: Date | null,
-  ) {
-    this.id = id ?? '';
-    this.name = props.name;
-    this.email = props.email;
-    this.password = props.password;
-    this.createdAt = createdAt ?? new Date();
-    this.updatedAt = updatedAt ?? null;
+export interface IUserProps {
+  name: string;
+  email: string;
+  password: string;
+  createdAt?: Date;
+  updatedAt?: Date | null;
+}
+
+export class User extends Entity<IUserProps> {
+  get name(): string {
+    return this.props.name;
+  }
+
+  get email(): string {
+    return this.props.email;
+  }
+
+  get password(): string {
+    return this.props.password;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt ?? new Date();
+  }
+
+  get updatedAt(): Date | null {
+    return this.props.updatedAt ?? null;
+  }
+
+  set name(value: string) {
+    this.props.name = value;
+  }
+
+  set email(value: string) {
+    this.props.email = value;
+  }
+
+  set password(value: string) {
+    this.props.password = value;
+  }
+
+  static create(props: IUserProps, id?: UniqueEntityID) {
+    const user = new User(
+      {
+        ...props,
+        createdAt: props.createdAt ?? new Date(),
+      },
+      id,
+    );
+
+    return user;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      password: this.password,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }
