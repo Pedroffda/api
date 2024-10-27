@@ -4,7 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Category } from '../../enterprise/entities/category.entity';
+import {
+  Category,
+  ICategoryProps,
+} from '../../enterprise/entities/category.entity';
 import { CategoryRepository } from '../repositories/category-repository';
 
 @Injectable()
@@ -14,11 +17,7 @@ export class CreateCategoryUseCase {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(data: {
-    name: string;
-    description?: string;
-    userId: string;
-  }): Promise<Category> {
+  async execute(data: ICategoryProps): Promise<Category> {
     const category = Category.create({
       name: data.name,
       description: data.description,

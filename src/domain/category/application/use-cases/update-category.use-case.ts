@@ -1,19 +1,36 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CategoryRepository } from '../repositories/category-repository';
 
 @Injectable()
 export class UpdateCategoryUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(id: string, data: { name?: string; description?: string }) {
+  async execute(
+    id: string,
+    userId: string,
+    updateData: { name?: string; description?: string },
+  ) {
     const category = await this.categoryRepository.findById(id);
+
     if (!category) {
       throw new NotFoundException('Category not found');
     }
 
-    if (data.name) category.name = data.name;
-    if (data.description) category.description = data.description;
+    if (category.userId !== userId) {
+      throw new ForbiddenException(
+        'You are not allowed to update this category',
+      );
+    }
 
-    return await this.categoryRepository.update(id, category);
+    const updatedCategory = await this.categoryRepository.update(
+      id,
+      updateData,
+    );
+
+    return updatedCategory;
   }
 }

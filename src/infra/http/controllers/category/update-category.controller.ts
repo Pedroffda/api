@@ -1,4 +1,6 @@
 import { UpdateCategoryUseCase } from '@/domain/category/application/use-cases/update-category.use-case';
+import { CurrentUser } from '@/infra/auth/current-user-decorator';
+import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { z } from 'zod';
@@ -11,7 +13,7 @@ const updateCategorySchema = z
   })
   .strict();
 
-type UpdateCategoryDto = z.infer<typeof updateCategorySchema>;
+export type UpdateCategoryDto = z.infer<typeof updateCategorySchema>;
 
 @Controller('categories')
 export class UpdateCategoryController {
@@ -21,9 +23,9 @@ export class UpdateCategoryController {
   @UseGuards(AuthGuard('jwt'))
   async updateCategory(
     @Param('id') id: string,
-    @Body(new ZodValidationPipe(updateCategorySchema))
-    body: UpdateCategoryDto,
+    @Body(new ZodValidationPipe(updateCategorySchema)) body: UpdateCategoryDto,
+    @CurrentUser() user: UserPayload,
   ) {
-    return await this.updateCategoryUseCase.execute(id, body);
+    return await this.updateCategoryUseCase.execute(id, user.sub, body);
   }
 }

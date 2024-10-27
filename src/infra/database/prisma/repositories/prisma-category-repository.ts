@@ -53,11 +53,10 @@ export class PrismaCategoryRepository implements CategoryRepository {
     });
   }
 
-  async update(id: string, category: Category): Promise<Category> {
-    const data = PrismaCategoryMapper.toPrisma(category);
+  async update(id: string, updateData: Partial<Category>): Promise<Category> {
     const updatedCategory = await this.prisma.category.update({
-      where: { id },
-      data,
+      where: { id, isActive: true },
+      data: updateData,
     });
     return PrismaCategoryMapper.toDomain(updatedCategory);
   }
@@ -65,6 +64,17 @@ export class PrismaCategoryRepository implements CategoryRepository {
   async findAll(): Promise<Category[]> {
     const categories = await this.prisma.category.findMany({
       where: {
+        isActive: true,
+      },
+    });
+
+    return PrismaCategoryMapper.toDomainList(categories);
+  }
+
+  async findAllByUserId(userId: string): Promise<Category[]> {
+    const categories = await this.prisma.category.findMany({
+      where: {
+        userId: userId,
         isActive: true,
       },
     });
