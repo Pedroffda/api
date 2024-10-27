@@ -24,20 +24,20 @@ model User {
 }
 
 model Transaction {
-  id           String        @id @default(uuid())
-  type         String
+  id           String          @id @default(uuid())
   amount       Decimal
   description  String?
   date         DateTime
-  userId       String        @map("user_id")
-  catecoryId   String        @map("category_id")
-  createdAt    DateTime?     @default(now()) @map("created_at")
-  updatedAt    DateTime?     @updatedAt @map("updated_at")
-  deletedAt    DateTime?     @map("deleted_at")
-  isActive     Boolean       @default(true) @map("is_active")
+  userId       String          @map("user_id")
+  categoryId   String          @map("category_id")
+  createdAt    DateTime?       @default(now()) @map("created_at")
+  updatedAt    DateTime?       @updatedAt @map("updated_at")
+  deletedAt    DateTime?       @map("deleted_at")
+  isActive     Boolean         @default(true) @map("is_active")
+  type         TransactionType
   installments Installment[]
-  category     Category      @relation(fields: [catecoryId], references: [id])
-  user         User          @relation(fields: [userId], references: [id])
+  category     Category        @relation(fields: [categoryId], references: [id])
+  user         User            @relation(fields: [userId], references: [id])
 
   @@map("transactions")
 }
@@ -70,4 +70,19 @@ model Installment {
   transaction   Transaction @relation(fields: [transactionId], references: [id])
 
   @@map("installments")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+  INVESTMENT
+  WITHDRAWAL
+  DEPOSIT
+  PAYMENT
+  REIMBURSEMENT
+  REFUND
+  CHARGE
+  DONATION
+  ADJUSTMENT
 }
