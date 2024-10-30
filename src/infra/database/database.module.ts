@@ -1,9 +1,11 @@
 import { CategoryRepository } from '@/domain/category/application/repositories/category-repository';
+import { InstallmentRepository } from '@/domain/installment/application/repositories/installment-repository';
 import { TransactionRepository } from '@/domain/transaction/application/repositories/transaction-repository';
 import { UserRepository } from '@/domain/user/application/repositories/user-repository';
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaCategoryRepository } from './prisma/repositories/prisma-category-repository';
+import { PrismaInstallmentRepository } from './prisma/repositories/prisma-installment-repository';
 import { PrismaTransactionRepository } from './prisma/repositories/prisma-transaction-repository';
 import { PrismaUserRepository } from './prisma/repositories/prisma-user-repository';
 
@@ -22,12 +24,17 @@ import { PrismaUserRepository } from './prisma/repositories/prisma-user-reposito
       provide: TransactionRepository,
       useClass: PrismaTransactionRepository,
     },
+    {
+      provide: InstallmentRepository,
+      useClass: PrismaInstallmentRepository,
+    },
   ],
   exports: [
     PrismaService,
     UserRepository,
     CategoryRepository,
     TransactionRepository,
+    InstallmentRepository,
   ],
 })
 export class DatabaseModule {}

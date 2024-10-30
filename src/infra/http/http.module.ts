@@ -3,6 +3,11 @@ import { DeleteCategoryUseCase } from '@/domain/category/application/use-cases/d
 import { GetAllCategoriesUseCase } from '@/domain/category/application/use-cases/get-all-categories.use-case';
 import { GetCategoryUseCase } from '@/domain/category/application/use-cases/get-category.use-case';
 import { UpdateCategoryUseCase } from '@/domain/category/application/use-cases/update-category.use-case';
+import { CreateInstallmentUseCase } from '@/domain/installment/application/use-cases/create-installment.use-case';
+import { DeleteInstallmentUseCase } from '@/domain/installment/application/use-cases/delete-installment.use-case';
+import { GetAllInstallmentsUseCase } from '@/domain/installment/application/use-cases/get-all-installments.use-case';
+import { GetInstallmentUseCase } from '@/domain/installment/application/use-cases/get-installment.use-case';
+import { UpdateInstallmentUseCase } from '@/domain/installment/application/use-cases/update-installment.use-case';
 import { CreateTransactionUseCase } from '@/domain/transaction/application/use-cases/create-transaction.use-case';
 import { DeleteTransactionUseCase } from '@/domain/transaction/application/use-cases/delete-transaction.use-case';
 import { GetAllTransactionsUseCase } from '@/domain/transaction/application/use-cases/get-all-transactions.use-case';
@@ -21,6 +26,11 @@ import { GetAllCategoriesController } from './controllers/category/get-all-categ
 import { GetCategoryController } from './controllers/category/get-category.controller';
 import { UpdateCategoryController } from './controllers/category/update-category.controller';
 import { CryptographyModule } from './controllers/cryptography/cryptography.module';
+import { CreateInstallmentController } from './controllers/installment/create-installment.controller';
+import { DeleteInstallmentController } from './controllers/installment/delete-installment.controller';
+import { GetAllInstallmentsController } from './controllers/installment/get-all-installments.controller';
+import { GetInstallmentController } from './controllers/installment/get-installment.controller';
+import { UpdateInstallmentController } from './controllers/installment/update-installment.controller';
 import { CreateTransactionController } from './controllers/transaction/create-transaction.controller';
 import { DeleteTransactionController } from './controllers/transaction/delete-transaction.controller';
 import { GetAllTransactionsController } from './controllers/transaction/get-all-transaction.controller';
@@ -51,6 +61,12 @@ import { GetUserController } from './controllers/user/get-user.controller';
     GetTransactionController,
     UpdateTransactionController,
     DeleteTransactionController,
+
+    CreateInstallmentController,
+    GetAllInstallmentsController,
+    GetInstallmentController,
+    UpdateInstallmentController,
+    DeleteInstallmentController,
   ],
   providers: [
     CreateUserUseCase,
@@ -69,6 +85,12 @@ import { GetUserController } from './controllers/user/get-user.controller';
     GetTransactionUseCase,
     UpdateTransactionUseCase,
     DeleteTransactionUseCase,
+
+    CreateInstallmentUseCase,
+    GetAllInstallmentsUseCase,
+    GetInstallmentUseCase,
+    UpdateInstallmentUseCase,
+    DeleteInstallmentUseCase,
   ],
 })
 export class HttpModule {}
