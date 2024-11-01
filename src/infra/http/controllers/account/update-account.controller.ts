@@ -16,7 +16,7 @@ const updateAccountDto = z
 
 export type UpdateAccountDto = z.infer<typeof updateAccountDto>;
 
-@Controller('transactions')
+@Controller('accounts')
 export class UpdateAccountController {
   constructor(private readonly updateAccountUseCase: UpdateAccountUseCase) {}
 

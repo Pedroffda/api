@@ -1,9 +1,6 @@
+import { AccountRepository } from '@/domain/account/application/repositories/account-repository';
 import { CategoryRepository } from '@/domain/category/application/repositories/category-repository';
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Transaction } from '../../enterprise/entities/transaction.entity';
 import { TransactionRepository } from '../repositories/transaction-repository';
 
@@ -12,6 +9,7 @@ export class UpdateTransactionUseCase {
   constructor(
     private readonly transactionRepository: TransactionRepository,
     private readonly categoryRepository: CategoryRepository,
+    private readonly accountRepository: AccountRepository,
   ) {}
 
   async execute(id: string, userId: string, updateData: Partial<Transaction>) {
@@ -21,10 +19,16 @@ export class UpdateTransactionUseCase {
       throw new NotFoundException('Transaction not found');
     }
 
-    if (transaction.userId !== userId) {
-      throw new ForbiddenException(
-        'You are not allowed to update this Transaction',
-      );
+    const account = await this.accountRepository.findById(
+      transaction.accountId,
+    );
+
+    if (!account) {
+      throw new NotFoundException('Account not found');
+    }
+
+    if (account.userId !== userId) {
+      throw new NotFoundException('Account not found');
     }
 
     if (updateData.categoryId) {

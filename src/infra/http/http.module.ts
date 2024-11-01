@@ -1,3 +1,8 @@
+import { CreateAccountUseCase } from '@/domain/account/application/use-cases/create-account.use-case';
+import { DeleteAccountUseCase } from '@/domain/account/application/use-cases/delete-account.use-case';
+import { GetAccountUseCase } from '@/domain/account/application/use-cases/get-account.use-case';
+import { GetAllAccountsUseCase } from '@/domain/account/application/use-cases/get-all-accounts.use-case';
+import { UpdateAccountUseCase } from '@/domain/account/application/use-cases/update-account.use-case';
 import { CreateCategoryUseCase } from '@/domain/category/application/use-cases/create-category.use-case';
 import { DeleteCategoryUseCase } from '@/domain/category/application/use-cases/delete-category.use-case';
 import { GetAllCategoriesUseCase } from '@/domain/category/application/use-cases/get-all-categories.use-case';
@@ -19,6 +24,11 @@ import { GetAllUsersUseCase } from '@/domain/user/application/use-cases/get-all-
 import { GetUserUseCase } from '@/domain/user/application/use-cases/get-user.use-case';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
+import { CreateAccountController } from './controllers/account/create-account.controller';
+import { DeleteAccountController } from './controllers/account/delete-account.controller';
+import { GetAccountController } from './controllers/account/get-account.controller';
+import { GetAllAccountsController } from './controllers/account/get-all-accounts.controller';
+import { UpdateAccountController } from './controllers/account/update-account.controller';
 import { AuthenticateController } from './controllers/auth/authenticate.controller';
 import { CreateCategoryController } from './controllers/category/create-category.controller';
 import { DeleteCategoryController } from './controllers/category/delete-category.controller';
@@ -67,6 +77,12 @@ import { GetUserController } from './controllers/user/get-user.controller';
     GetInstallmentController,
     UpdateInstallmentController,
     DeleteInstallmentController,
+
+    CreateAccountController,
+    GetAllAccountsController,
+    GetAccountController,
+    UpdateAccountController,
+    DeleteAccountController,
   ],
   providers: [
     CreateUserUseCase,
@@ -91,6 +107,12 @@ import { GetUserController } from './controllers/user/get-user.controller';
     GetInstallmentUseCase,
     UpdateInstallmentUseCase,
     DeleteInstallmentUseCase,
+
+    CreateAccountUseCase,
+    GetAllAccountsUseCase,
+    GetAccountUseCase,
+    UpdateAccountUseCase,
+    DeleteAccountUseCase,
   ],
 })
 export class HttpModule {}

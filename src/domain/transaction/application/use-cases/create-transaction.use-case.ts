@@ -1,3 +1,4 @@
+import { AccountRepository } from '@/domain/account/application/repositories/account-repository';
 import { CategoryRepository } from '@/domain/category/application/repositories/category-repository';
 import {
   ITransactionProps,
@@ -13,6 +14,7 @@ export class CreateTransactionUseCase {
     private readonly transactionRepository: TransactionRepository,
     private readonly categoryRepository: CategoryRepository,
     private readonly userRepository: UserRepository,
+    private readonly accountRepository: AccountRepository,
   ) {}
 
   async execute(data: ITransactionProps): Promise<Transaction> {
@@ -21,15 +23,23 @@ export class CreateTransactionUseCase {
       amount: data.amount,
       description: data.description,
       date: data.date,
-      userId: data.userId,
       categoryId: data.categoryId,
+      accountId: data.accountId,
     });
 
-    const userIdExists = await this.userRepository.findByUserId(
-      transaction.userId,
+    const accountExists = await this.accountRepository.findById(data.accountId);
+
+    if (!accountExists) {
+      throw new NotFoundException('Account not found');
+    }
+
+    const userExists = await this.userRepository.findByUserId(
+      accountExists.userId,
     );
 
-    if (!userIdExists) {
+    console.log(userExists);
+
+    if (!userExists) {
       throw new NotFoundException('User not found');
     }
 
@@ -37,11 +47,9 @@ export class CreateTransactionUseCase {
       transaction.categoryId,
     );
 
-    if (!categoryExists) {
-      throw new NotFoundException('Category not found');
-    }
+    console.log(categoryExists);
 
-    if (categoryExists.userId !== transaction.userId) {
+    if (!categoryExists) {
       throw new NotFoundException('Category not found');
     }
 

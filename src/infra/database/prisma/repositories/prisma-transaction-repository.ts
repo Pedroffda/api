@@ -52,7 +52,9 @@ export class PrismaTransactionRepository implements TransactionRepository {
   async findAll(userId: string): Promise<Transaction[]> {
     const transactions = await this.prisma.transaction.findMany({
       where: {
-        userId: userId,
+        account: {
+          userId,
+        },
         isActive: true,
       },
     });

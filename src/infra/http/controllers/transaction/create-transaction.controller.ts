@@ -14,6 +14,7 @@ const createTransactionDto = z.object({
   description: z.string().optional(),
   date: z.string(),
   categoryId: z.string(),
+  accountId: z.string(),
 });
 
 type CreateTransactionDto = z.infer<typeof createTransactionDto>;
@@ -33,12 +34,9 @@ export class CreateTransactionController {
   ) {
     const { amount, ...rest } = body;
 
-    console.log('body', body);
-
     return await this.createTransactionUseCase.execute({
       ...rest,
       amount: new Decimal(amount),
-      userId: user.sub,
     });
   }
 }

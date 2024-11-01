@@ -31,8 +31,10 @@ export class CreateInstallmentUseCase {
       throw new NotFoundException('Transaction not found');
     }
 
-    if (transactionExists.userId !== userId) {
-      throw new NotFoundException('Transaction not found');
+    const userExists = await this.userRepository.findByUserId(userId);
+
+    if (!userExists) {
+      throw new NotFoundException('User not found');
     }
 
     await this.InstallmentRepository.create(installment);

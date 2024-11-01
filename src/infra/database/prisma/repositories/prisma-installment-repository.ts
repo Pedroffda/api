@@ -53,7 +53,9 @@ export class PrismaInstallmentRepository implements InstallmentRepository {
     const installments = await this.prisma.installment.findMany({
       where: {
         transaction: {
-          userId,
+          account: {
+            userId,
+          },
         },
         isActive: true,
       },

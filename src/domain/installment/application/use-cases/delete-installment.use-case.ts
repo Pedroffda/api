@@ -1,4 +1,6 @@
+import { AccountRepository } from '@/domain/account/application/repositories/account-repository';
 import { TransactionRepository } from '@/domain/transaction/application/repositories/transaction-repository';
+import { UserRepository } from '@/domain/user/application/repositories/user-repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InstallmentRepository } from '../repositories/installment-repository';
 
@@ -7,6 +9,8 @@ export class DeleteInstallmentUseCase {
   constructor(
     private readonly installmentRepository: InstallmentRepository,
     private readonly transactionRepository: TransactionRepository,
+    private readonly userRepository: UserRepository,
+    private readonly accountRepository: AccountRepository,
   ) {}
 
   async execute(id: string, userId: string): Promise<void> {
@@ -24,8 +28,16 @@ export class DeleteInstallmentUseCase {
       throw new NotFoundException('Transaction not found');
     }
 
-    if (transaction.userId !== userId) {
-      throw new NotFoundException('Transaction not found');
+    const account = await this.accountRepository.findById(
+      transaction.accountId,
+    );
+
+    if (!account) {
+      throw new NotFoundException('Account not found');
+    }
+
+    if (account.userId !== userId) {
+      throw new NotFoundException('Account not found');
     }
 
     await this.installmentRepository.delete(id);

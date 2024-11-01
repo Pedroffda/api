@@ -5,16 +5,6 @@ import { Decimal } from '@prisma/client/runtime/library';
 export enum TransactionType {
   INCOME = 'INCOME',
   EXPENSE = 'EXPENSE',
-  TRANSFER = 'TRANSFER',
-  INVESTMENT = 'INVESTMENT',
-  WITHDRAWAL = 'WITHDRAWAL',
-  DEPOSIT = 'DEPOSIT',
-  PAYMENT = 'PAYMENT',
-  REIMBURSEMENT = 'REIMBURSEMENT',
-  REFUND = 'REFUND',
-  CHARGE = 'CHARGE',
-  DONATION = 'DONATION',
-  ADJUSTMENT = 'ADJUSTMENT',
 }
 
 export interface ITransactionProps {
@@ -22,8 +12,8 @@ export interface ITransactionProps {
   amount: Decimal;
   description?: string;
   date: string;
-  userId: string;
   categoryId: string;
+  accountId: string;
   createdAt?: Date;
   updatedAt?: Date | null;
 }
@@ -45,10 +35,6 @@ export class Transaction extends Entity<ITransactionProps> {
     return this.props.date;
   }
 
-  get userId(): string {
-    return this.props.userId;
-  }
-
   get categoryId(): string {
     return this.props.categoryId;
   }
@@ -59,6 +45,14 @@ export class Transaction extends Entity<ITransactionProps> {
 
   get updatedAt(): Date | null {
     return this.props.updatedAt ?? null;
+  }
+
+  get accountId(): string {
+    return this.props.accountId;
+  }
+
+  set accountId(value: string) {
+    this.props.accountId = value;
   }
 
   set type(value: TransactionType) {
@@ -75,10 +69,6 @@ export class Transaction extends Entity<ITransactionProps> {
 
   set date(value: string) {
     this.props.date = value;
-  }
-
-  set userId(value: string) {
-    this.props.userId = value;
   }
 
   set categoryId(value: string) {
@@ -104,8 +94,8 @@ export class Transaction extends Entity<ITransactionProps> {
       amount: this.amount,
       description: this.description,
       date: this.date,
-      userId: this.userId,
       categoryId: this.categoryId,
+      accountId: this.accountId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

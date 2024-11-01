@@ -25,9 +25,9 @@ export class UpdateInstallmentUseCase {
       throw new NotFoundException('Transaction not found');
     }
 
-    if (transaction.userId !== userId) {
-      throw new NotFoundException('Transaction not found');
-    }
+    // if (transaction.userId !== userId) {
+    //   throw new NotFoundException('Transaction not found');
+    // }
 
     if (updateData.transactionId) {
       const transactionExists = await this.transactionRepository.findById(
@@ -38,9 +38,9 @@ export class UpdateInstallmentUseCase {
         throw new NotFoundException('Transaction not found');
       }
 
-      if (transactionExists.userId !== userId) {
-        throw new NotFoundException('Transaction not found');
-      }
+      // if (transactionExists.userId !== userId) {
+      //   throw new NotFoundException('Transaction not found');
+      // }
     }
 
     const updatedInstallment = await this.installmentRepository.update(

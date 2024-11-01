@@ -17,9 +17,11 @@ export class PrismaTransactionMapper {
       },
       createdAt: transaction.createdAt,
       updatedAt: transaction.updatedAt ?? undefined,
-      user: {
-        connect: { id: transaction.userId },
+      description: transaction.description,
+      account: {
+        connect: { id: transaction.accountId },
       },
+      isActive: true,
     };
   }
 
@@ -29,11 +31,11 @@ export class PrismaTransactionMapper {
         type: raw.type as TransactionType,
         amount: raw.amount ?? 0,
         date: raw.date.toISOString(),
-        categoryId: raw.categoryId,
         description: raw.description ?? undefined,
         createdAt: raw.createdAt ?? new Date(),
         updatedAt: raw.updatedAt,
-        userId: raw.userId,
+        accountId: raw.accountId,
+        categoryId: raw.categoryId ?? '',
       },
       new UniqueEntityID(raw.id),
     );
