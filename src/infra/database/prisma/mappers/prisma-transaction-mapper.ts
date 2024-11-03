@@ -11,7 +11,7 @@ export class PrismaTransactionMapper {
       id: transaction.id,
       amount: transaction.amount,
       type: transaction.type,
-      date: transaction.date,
+      date: transaction.date ? new Date(transaction.date) : new Date(),
       category: {
         connect: { id: transaction.categoryId },
       },

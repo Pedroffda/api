@@ -7,7 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     // logger: false,
   });
-  // await app.listen(process.env.PORT ?? 3000);
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   const configService: ConfigService<Env, true> = app.get(ConfigService);
   const port = configService.get('PORT', { infer: true });
 

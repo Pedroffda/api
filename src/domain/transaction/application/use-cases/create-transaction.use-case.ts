@@ -37,8 +37,6 @@ export class CreateTransactionUseCase {
       accountExists.userId,
     );
 
-    console.log(userExists);
-
     if (!userExists) {
       throw new NotFoundException('User not found');
     }
@@ -46,8 +44,6 @@ export class CreateTransactionUseCase {
     const categoryExists = await this.categoryRepository.findById(
       transaction.categoryId,
     );
-
-    console.log(categoryExists);
 
     if (!categoryExists) {
       throw new NotFoundException('Category not found');

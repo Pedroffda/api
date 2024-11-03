@@ -1,6 +1,7 @@
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
 import {
+  BadRequestException,
   Body,
   Controller,
   Post,
@@ -50,8 +51,54 @@ export class AuthenticateController {
       isAdmin: user.isAdmin,
     });
 
+    const refreshToken = this.jwtService.sign(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: '1d',
+      },
+    );
+
     return {
       access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+  }
+
+  @Post('/refresh')
+  async refresh(@Body() body: { refresh_token: string }) {
+    const { refresh_token } = body;
+
+    if (!refresh_token) {
+      throw new BadRequestException('Invalid refresh token');
+    }
+
+    let payload;
+
+    try {
+      payload = this.jwtService.verify(refresh_token);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: payload.sub,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const newAccessToken = this.jwtService.sign({
+      sub: user.id,
+      isAdmin: user.isAdmin,
+    });
+
+    return {
+      access_token: newAccessToken,
     };
   }
 }
