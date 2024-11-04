@@ -45,6 +45,11 @@ export class UpdateTransactionUseCase {
       }
     }
 
+    // Format date to ISO string if it exists
+    if (updateData.date) {
+      updateData.date = new Date(updateData.date).toISOString(); // Ensure ISO-8601 format
+    }
+
     const updatedTransaction = await this.transactionRepository.update(
       id,
       updateData,

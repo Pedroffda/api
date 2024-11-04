@@ -18,6 +18,7 @@ const updateTransactionDto = z
     description: z.string().optional(),
     date: z.string().optional(),
     categoryId: z.string().optional(),
+    accountId: z.string().optional(),
   })
   .strict();
 
