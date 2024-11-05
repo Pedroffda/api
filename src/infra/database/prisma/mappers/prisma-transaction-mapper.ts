@@ -25,7 +25,21 @@ export class PrismaTransactionMapper {
     };
   }
 
-  static toDomain(raw: PrismaTransaction): Transaction {
+  // PrismaTransactionMapper.ts
+  static toDomain(
+    raw: PrismaTransaction & {
+      category?: {
+        id: string;
+        name: string;
+        userId: string;
+        description?: string | null;
+        createdAt?: Date;
+        updatedAt?: Date | null;
+        deletedAt?: Date | null;
+        isActive?: boolean;
+      };
+    },
+  ): Transaction {
     return Transaction.create(
       {
         type: raw.type as TransactionType,
@@ -35,7 +49,14 @@ export class PrismaTransactionMapper {
         createdAt: raw.createdAt ?? new Date(),
         updatedAt: raw.updatedAt,
         accountId: raw.accountId,
-        categoryId: raw.categoryId ?? '',
+        // categoryId: raw.categoryId ?? '',
+        category: raw.category
+          ? {
+              id: raw.category.id,
+              name: raw.category.name,
+              userId: raw.category.userId,
+            }
+          : undefined,
       },
       new UniqueEntityID(raw.id),
     );

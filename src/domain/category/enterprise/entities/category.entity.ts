@@ -2,6 +2,7 @@ import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export interface ICategoryProps {
+  id?: string;
   name: string;
   description?: string;
   userId: string;

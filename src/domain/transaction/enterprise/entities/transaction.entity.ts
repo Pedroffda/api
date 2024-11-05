@@ -1,5 +1,6 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { ICategoryProps } from '@/domain/category/enterprise/entities/category.entity';
 import { Decimal } from '@prisma/client/runtime/library';
 
 export enum TransactionType {
@@ -12,10 +13,11 @@ export interface ITransactionProps {
   amount: Decimal;
   description?: string;
   date: string;
-  categoryId: string;
+  categoryId?: string;
   accountId: string;
   createdAt?: Date;
   updatedAt?: Date | null;
+  category?: ICategoryProps;
 }
 
 export class Transaction extends Entity<ITransactionProps> {
@@ -36,7 +38,11 @@ export class Transaction extends Entity<ITransactionProps> {
   }
 
   get categoryId(): string {
-    return this.props.categoryId;
+    return this.props.categoryId ?? '';
+  }
+
+  get category(): ICategoryProps {
+    return this.props.category ?? { name: '', userId: '', id: '' };
   }
 
   get createdAt(): Date {
@@ -75,6 +81,10 @@ export class Transaction extends Entity<ITransactionProps> {
     this.props.categoryId = value;
   }
 
+  set category(value: ICategoryProps) {
+    this.props.category = value;
+  }
+
   static create(props: ITransactionProps, id?: UniqueEntityID) {
     const transaction = new Transaction(
       {
@@ -94,10 +104,10 @@ export class Transaction extends Entity<ITransactionProps> {
       amount: this.amount,
       description: this.description,
       date: this.date,
-      categoryId: this.categoryId,
       accountId: this.accountId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      category: this.category,
     };
   }
 }

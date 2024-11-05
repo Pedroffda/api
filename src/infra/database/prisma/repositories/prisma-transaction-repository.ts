@@ -1,6 +1,6 @@
 import { TransactionRepository } from '@/domain/Transaction/application/repositories/Transaction-repository';
 import { Transaction } from '@/domain/Transaction/enterprise/entities/Transaction.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaTransactionMapper } from '../mappers/prisma-Transaction-mapper';
 import { PrismaService } from '../prisma.service';
 
@@ -19,13 +19,16 @@ export class PrismaTransactionRepository implements TransactionRepository {
         id,
         isActive: true,
       },
+      include: {
+        category: true,
+      },
     });
 
     if (!transaction) {
       return null;
     }
 
-    return PrismaTransactionMapper.toDomain(transaction);
+    return PrismaTransactionMapper.toDomain(transaction as any);
   }
 
   async delete(id: string): Promise<void> {
@@ -42,9 +45,17 @@ export class PrismaTransactionRepository implements TransactionRepository {
     id: string,
     updateData: Partial<Transaction>,
   ): Promise<Transaction> {
+    // Optionally, verify that the transaction is active before updating
+    const existingTransaction = await this.findById(id);
+    if (!existingTransaction) {
+      throw new NotFoundException(
+        `Transaction with id ${id} not found or inactive.`,
+      );
+    }
+
     const updatedTransaction = await this.prisma.transaction.update({
-      where: { id, isActive: true },
-      data: updateData,
+      where: { id },
+      data: updateData as any,
     });
     return PrismaTransactionMapper.toDomain(updatedTransaction);
   }
@@ -57,8 +68,14 @@ export class PrismaTransactionRepository implements TransactionRepository {
         },
         isActive: true,
       },
+      include: {
+        category: true,
+      },
     });
+    console.log(transactions);
 
     return PrismaTransactionMapper.toDomainList(transactions);
+
+    // return PrismaTransactionMapper.toDomainList(transactions);
   }
 }
